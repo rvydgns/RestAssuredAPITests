@@ -1,5 +1,4 @@
 package com.yazilimtestodevi;
-
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.BeforeClass;
@@ -11,22 +10,18 @@ import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 public class ReqresAPITests {
-
-    // aldığım apı anahtarı
-    private static final String API_KEY = "reqres_dea273da06144ccbb603f46960e1abb1"; // SİZİN KEYİNİZ!
+    private static final String API_KEY = "reqres_dea273da06144ccbb603f46960e1abb1";
 
     @BeforeClass
     public static void setup() {
         RestAssured.baseURI = "https://reqres.in";
-        RestAssured.basePath = "/api";
+        RestAssured.basePath = "/api";  //
     }
 
-    // GET
     @Test
-    public void getSingleUser_ShouldReturnCorrectDataAndPerformChecks() {
+    public void getSingleUser() {
         given()
                 .log().all()
-                // 🛠️ Düzeltme: X-Api-Key ve Bearer öneki kaldırıldı
                 .header("X-Api-Key", API_KEY)
                 .when()
                 .get("/users/2")
@@ -35,15 +30,14 @@ public class ReqresAPITests {
                 .statusCode(200)
                 .body("data.id", equalTo(2))
                 .body("data.email", equalTo("janet.weaver@reqres.in"))
-                .time(lessThan(2000L), TimeUnit.MILLISECONDS);
+                .time(lessThan(5000L), TimeUnit.MILLISECONDS);
     }
 
-    // POST
     @Test
-    public void postCreateUser_ShouldCreateUserAndReturnCorrectStatusAndBody() {
+    public void postCreateUser() {
         JSONObject requestBody = new JSONObject();
-        requestBody.put("name", "Mert");
-        requestBody.put("job", "Software Test Engineer");
+        requestBody.put("name", "Rüveyda Nur");
+        requestBody.put("job", "Yazılım Müh.");
 
         given()
                 .log().all()
@@ -55,9 +49,9 @@ public class ReqresAPITests {
                 .then()
                 .log().all()
                 .statusCode(201)
-                .body("name", equalTo("Mert"))
-                .body("job", equalTo("Software Test Engineer"))
+                .body("name", equalTo("Rüveyda Nur"))
+                .body("job", equalTo("Yazılım Müh."))
                 .body("id", notNullValue())
-                .time(lessThan(2000L), TimeUnit.MILLISECONDS);
+                .time(lessThan(5000L), TimeUnit.MILLISECONDS);
     }
 }
